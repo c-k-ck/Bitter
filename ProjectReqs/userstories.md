@@ -4,7 +4,7 @@
 
     As a user, I want to be able to rate any experience and express my complaints about it in a rate and review format, so that I can share my opinions with others and engage in discussions.
 
-    - __Feature Tasks__:
+__Feature Tasks__:
         1. Develop a rating system that allows users to assign a star rating (e.g., on a scale of 1 to 5) to any experience they want to review.
         
         2. Implement a user-friendly interface for creating new posts in a rate and review format.
