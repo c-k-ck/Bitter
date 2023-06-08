@@ -34,28 +34,33 @@
 
 ## User Story 2: Edit Profile Information
 
-As a user, I want to be able to edit and update my profile information, including my name, profile picture, and bio, so that I can keep my personal details up to date on the social media platform.
+	As a user, I want to be able to edit and update my profile information, including my name, profile picture, and bio, so that I can keep my personal details up to date on the social media platform.
 
 **_Front-end Tasks_**
-    1. Provide options to edit and update personal information, including name, profile picture, and bio.
+
+	1. Provide options to edit and update personal information, including name, profile picture, and bio.
 
 **_Back-end Tasks_**
-    1. Develop APIs to handle profile information updates and ensure data integrity.
+
+	1. Develop APIs to handle profile information updates and ensure data integrity.
 
 **Acceptance Tests**
-    1. Test the functionality to edit and update personal information, ensuring that changes reflect correctly on the profile page and are saved in the system.
+
+	1. Test the functionality to edit and update personal information, ensuring that changes reflect correctly on the profile page and are saved in the system.
 
 ## User Story 3: Rate and Review Experiences
     As a user, I want to be able to rate any experience and express my complaints about it in a rate and review format, so that I can share my opinions with others and engage in discussions.
 
 
 **_Front-end Tasks_**
-    2. Implement a user-friendly interface for creating new posts in a rate and review format.
+
+	2. Implement a user-friendly interface for creating new posts in a rate and review format.
 
     3. Include fields for users to provide a title, description, and tags or categories related to their review.
 
 **_Back-end Tasks_**
-    1. Develop a rating system that allows users to assign a star rating (e.g., on a scale of 1 to 5) to any experience they want to review.
+
+	1. Develop a rating system that allows users to assign a star rating (e.g., on a scale of 1 to 5) to any experience they want to review.
             
     4. Enable users to post their reviews, which include their ratings and complaints.
     
@@ -74,14 +79,16 @@ As a user, I want to be able to edit and update my profile information, includin
 	As a user, I want to search and filter posts based on specific criteria, so that I can find relevant content.
     
 **_Front-end Tasks_**
-    1. Develop a search functionality that allows users to search for posts using keywords or phrases.
+
+	1. Develop a search functionality that allows users to search for posts using keywords or phrases.
             
     2. Implement filters based on categories, ratings, or other relevant attributes.
             
     3. Display search results in a clear and organized manner.
 
 **_Back-end_**
-    1. Implement the search functionality to process user queries and retrieve relevant posts.
+
+	1. Implement the search functionality to process user queries and retrieve relevant posts.
         
     2. Develop the filtering mechanism to narrow down search results based on selected criteria.
 
@@ -98,14 +105,16 @@ As a user, I want to be able to edit and update my profile information, includin
     As a user, I want to engage in discussions and provide feedback on posts, so that I can interact with other users.
 
 **_Front-end_**
-    1. Implement a commenting system that allows users to leave comments on posts.
+
+	1. Implement a commenting system that allows users to leave comments on posts.
 
     2. Include options for users to like or dislike posts and comments.
             
     3. Enable users to reply to specific comments and engage in conversations.
 
 **_Back-end_**
-    1. Develop the server-side functionality to handle comments and store them in the appropriate format.
+
+	1. Develop the server-side functionality to handle comments and store them in the appropriate format.
         
     2. Implement the logic for tracking likes and dislikes on posts and comments.
         
@@ -125,14 +134,16 @@ As a user, I want to be able to edit and update my profile information, includin
 	As a user, I want to manage my own posts, so that I can edit or delete them if needed.
     
 **_Front-end Tasks_**
-    1. Create a user profile section where users can view their own posts.
+
+	1. Create a user profile section where users can view their own posts.
 
     2. Implement editing functionality that allows users to modify the content of their posts.
             
     3. Include a delete option to allow users to remove their posts from the platform.
 
 **_Back-end Tasks_**
-    1. Develop the server-side APIs to retrieve and display a user's own posts.
+
+	1. Develop the server-side APIs to retrieve and display a user's own posts.
         
     2. Implement the logic to handle post editing and update the corresponding data.
         
@@ -153,7 +164,8 @@ As a user, I want to be able to edit and update my profile information, includin
     As a developer, I want to ensure that users are not sharing hateful or harmful content by implementing a censorship feature to detect and censor offensive language and hate speech, so that the platform maintains a safe and respectful environment.
     
 **_Back-end Tasks_**
-    1. Research and identify a reliable offensive language and hate speech detection library or API.
+
+	1. Research and identify a reliable offensive language and hate speech detection library or API.
             
     2. Integrate the chosen detection library or API into the platform's content submission process.
             
