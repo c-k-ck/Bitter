@@ -1,18 +1,23 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
 import AddReview from './AddReview';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Reviews() {
    const [reviews, setReviews] = useState([]);
+   const [favorites, setFavorites] = useState();
    const { getAccessTokenSilently } = useAuth0();
 
    useEffect(() => {
     fetchReviews();
 }, []);
+
+function reviewLikes(){
+    setFavorites(favorites +1)
+}
 
    const fetchReviews = async () =>{
     try {
@@ -63,6 +68,7 @@ export default function Reviews() {
                             <h2> {review.title} </h2>
                             <p>{review.description}</p>
                         </Card.Body>
+                        <Button onClick={reviewLikes}>&#9829;{favorites}</Button>
                     </Card>
                 ))
             ) : (
