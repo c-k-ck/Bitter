@@ -4,9 +4,9 @@ import Navbar from 'react-bootstrap/Navbar';
 function Footer () {
   
     return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand>Bitter</Navbar.Brand>
-      </Navbar>
+      <footer>
+        <h3>Bitter</h3>
+      </footer>
     )
   
 }

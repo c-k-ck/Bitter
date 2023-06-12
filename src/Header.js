@@ -10,17 +10,27 @@ export default function Header() {
   const { isAuthenticated} = useAuth0();
  
     return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand>Use Bitter, Feel Better</Navbar.Brand>
-      <Nav>
-        <Nav.Link as={Link} to="/">Home</Nav.Link>
-        {/* Add a navigation link to the about page */}
-        <Nav.Link as={Link} to="/about">About</Nav.Link>
-        <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+      <div >
+        <header>
+        <nav>
+      <div className="logo">
+        <img src="AltBitter.png" alt="Logo" />
+        <img src='BitterAlt.png' alt='textlogo'/>
+      </div>
+      <div>
+        </div>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/profile">Profile</a></li>
+        
         {!isAuthenticated ? <LoginButton /> : <LogoutButton/> }
         
-      </Nav>
-    </Navbar>
+      </ul>
+    </nav>
+    </header>
+      
+    </div>
   );
 }
 
