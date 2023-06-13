@@ -1,42 +1,44 @@
 import React from 'react';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Button } from 'react-bootstrap';
-// import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import AddReview from './AddReview';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 export default function Reviews() {
     const [reviews, setReviews] = useState([]); //array of reviews
-    const [favorites, setFavorites] = useState(0); //counter for faves
+    const [likes, setLikes] = useState(0); //counter for faves
+    const [disLikes, setDislikes] = useState(0)
     const [editingReview, setEditingReview] = useState(null); //review currently editing
     const [show, setShow] = useState(false);// control the modal
-    //    const { getAccessTokenSilently } = useAuth0();
-
+    const { getAccessTokenSilently } = useAuth0();
+    const { isAuthenticated } = useAuth0();
+    
     useEffect(() => {
         fetchReviews(); //runs the func when first rendered
     }, []);
 
     function reviewLikes() {
-        setFavorites(favorites + 1)
+        setLikes(likes + 1)
     }
-    function reviewdisLikes(){
-        setFavorites(favorites - 1)
+    function reviewdisLikes() {
+        setDislikes(disLikes + 1)
     }
 
     const fetchReviews = async () => { //sends the get req to fethc rev from server
         try {
-            // const token = await getAccessTokenSilently({
-            //     audience: '',
-            //     scope: 'openid profile email'
-            //   });
+            const token = await getAccessTokenSilently({
+                audience: 'bitteruserapi',
+                scope: 'openid profile email'
+            });
             const response = await axios.get('http://localhost:3001/post',
-                //   {
-                //     headers: {
-                //         authorization: `Bearer ${token}`,
-                //       }
-                //   }
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    }
+                }
             );
             setReviews(response.data)
         } catch (error) {
@@ -47,17 +49,17 @@ export default function Reviews() {
     const handleReviewSubmit = async (review) => { // accepts the obj, sends post req to http to add review to server and
         //refetches the reviews
         try {
-            // const token = await getAccessTokenSilently({
-            //     audience: '',
-            //     scope: 'openid profile email'
-            //   });
+            const token = await getAccessTokenSilently({
+                audience: 'bitteruserapi',
+                scope: 'openid profile email'
+            });
 
             const response = await axios.post('http://localhost:3001/post', review,
-                //   ,{
-                //     headers: {
-                //         authorization: `Bearer ${token}`,
-                //       }
-                //   }
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    }
+                }
             );
             if (response.status === 200) {
 
@@ -71,17 +73,17 @@ export default function Reviews() {
 
     const handleReviewDelete = async (postId) => { //accepts postId, sends the delete req to delete the review with the id, refetches
         try {
-            // const token = await getAccessTokenSilently({
-            //     audience: '',
-            //     scope: 'openid profile email'
-            //   });
+            const token = await getAccessTokenSilently({
+                audience: 'bitteruserapi',
+                scope: 'openid profile email'
+            });
 
             const response = await axios.delete(`http://localhost:3001/post/${postId}`
-                //   ,{
-                //     headers: {
-                //         authorization: `Bearer ${token}`,
-                //       }
-                //   }
+                , {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    }
+                }
             );
             if (response.status === 200) {
 
@@ -94,24 +96,24 @@ export default function Reviews() {
     }
 
     const handleReviewEdit = (review) => { //accepts the review obj, stores the review in editting rev state variable, sets show to true, which triggers the modal for adding a review
-        console.log( editingReview)
+
         setEditingReview(review);
         setShow(true)
     };
     const handleShow = () => setShow(true); // sets show to true which triggers modal for adding review
-    
+
     return (
         <div>
             <div><AddReview //this components edits and adds reviews, passing down props
-                 handleReviewSubmit={handleReviewSubmit}
-                 editingReview={editingReview}
-                 fetchReviews={fetchReviews}
-                 onReviewEdit={setEditingReview}
-                 handleShow={handleShow} 
-                 setShow={setShow} 
-                 show={show}
-                 onHide={() => setShow(false)} 
-                 /></div>
+                handleReviewSubmit={handleReviewSubmit}
+                editingReview={editingReview}
+                fetchReviews={fetchReviews}
+                onReviewEdit={setEditingReview}
+                handleShow={handleShow}
+                setShow={setShow}
+                show={show}
+                onHide={() => setShow(false)}
+            /></div>
 
             <div className="cards">
                 {reviews.length > 0 ? ( //map iterates over each review and creates a card with buttons
@@ -124,20 +126,23 @@ export default function Reviews() {
                                     <Card.Text>{review.description}</Card.Text>
                                     <p>{review.rating}/5</p>
                                 </Card.Body>
-                                <div className='cardButtons'>
-                                    <Button variant="primary"  onClick={() => { handleReviewEdit(review); }}>
-                                        Edit Review
-                                    </Button>
-                                    <Button variant='danger' onClick={() => handleReviewDelete(review._id)}>Delete Review</Button>
-                                    <Button variant='primary' onClick={reviewLikes}>👍{favorites}</Button>
-                                    <Button variant='primary' onClick={reviewdisLikes}>👎{favorites}</Button>
+                                {isAuthenticated && (
 
-                                </div>
+                                    <div className='cardButtons'>
+                                        <Button variant="primary" onClick={() => { handleReviewEdit(review); }}>
+                                            Edit Review
+                                        </Button>
+                                        <Button variant='danger' onClick={() => handleReviewDelete(review._id)}>Delete Review</Button>
+                                        <Button variant='primary' onClick={reviewLikes}>👍{likes}</Button>
+                                        <Button variant='primary' onClick={reviewdisLikes}>👎{disLikes}</Button>
+
+                                    </div>
+                                )}
                             </Card>
                         </div>
                     ))
                 ) : (
-                    <h3>No reviews found. Post a review!</h3>
+                    <h3>No reviews found. Log-in and Post a review!</h3>
                 )}
             </div>
         </div>
