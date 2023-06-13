@@ -9,7 +9,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 import Welcome from './Welcome';
 import Profile from './Profile';
 import Reviews from './Reviews';
