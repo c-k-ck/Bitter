@@ -1,49 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
+// import { useAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-export default function AddReview({fetchReviews}) {  //geting the function via props
+export default function AddReview({
+    editingReview, // the review currently being edited, or null if a new review is being added.
+    fetchReviews, //fetches the updated reviews from server
+    onReviewEdit, //function set to review being edited
+    handleShow, //opens the modal
+    setShow, //controls the modal
+    show, //is the modal visible
+    onHide}) {  //closes modal
 
 
-    const [show, setShow] = useState(false); // For toggling the Modal
-    const [category, setCategory] = useState('');
-    const [reviewTitle, setReviewTitle] = useState('');
-    const [userReview, setUserReview] = useState('');
+   
+    const [category, setCategory] = useState(''); 
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [rating, setRating] = useState('');
-    const { getAccessTokenSilently } = useAuth0();
+    
+    // const { getAccessTokenSilently } = useAuth0();
 
-    // Functions to handle the closing/opening of the Modal
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    // used to populate the form fields with the editing review data when a review is being edited or clear them if a new review is being added
+    useEffect(() => {
+        console.log(editingReview);
+        if (editingReview) {
+            setCategory(editingReview.category || '');
+            setTitle(editingReview.title || '');
+            setDescription(editingReview.description || '');
+            setRating(editingReview.rating || '');
+        } else {
+            setCategory('');
+            setTitle('');
+            setDescription('');
+            setRating('');
+        }
+    }, [editingReview]);
+        
     const handleReviewSubmit = async (event) => {
         event.preventDefault();
-        
+//creates a review obj and sends a Post req to add a new review or a put req to update a review
+//it gets teh latest reviews, hides the modal, and resets editingreview
         try {
-            const token = await getAccessTokenSilently({
-                audience: 'api identifier', //add identifier from auth0,
-                scope: 'open profile email',
-            });
+            // const token = await getAccessTokenSilently({
+            //     audience: 'api identifier', //add identifier from auth0,
+            //     scope: 'open profile email',
+            // });
 
-            const review = { category, reviewTitle, userReview, rating };
-            const response = await axios.post("http://localhost:3000/reviews", review, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                }
-            });
-            if (response.status === 200) {
-                console.log("Review submit successfull");
-                fetchReviews();
-                console.log(fetchReviews())
+            const review = { category, title, description, rating };
+            
+            if(editingReview){
+                await axios.put(`http://localhost:3001/post/${editingReview._id}`, review);
+                console.log('Review updated successfully')
+            } else{
+
+                await axios.post("http://localhost:3001/post", review 
+                // {
+            //     headers: {
+            //         authorization: `Bearer ${token}`,
+            //     }
+            // }
+            );
+            console.log("Review submit successfull");
             }
+                fetchReviews();
+                setShow(false);
+                onReviewEdit(null); // resetting editing review
+            
         } catch (error) {
             console.log(error);
         }
     }
-
+    const handleClose = () => setShow(false);
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
@@ -55,7 +85,7 @@ export default function AddReview({fetchReviews}) {  //geting the function via p
                     <Modal.Title>Leave a Review</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleReviewSubmit}>
+                    <Form onSubmit={handleReviewSubmit} >
                         <Form.Group className="mb-3">
                             <Form.Label>Category:</Form.Label>
                             <Form.Select
@@ -77,16 +107,16 @@ export default function AddReview({fetchReviews}) {  //geting the function via p
                             <Form.Label>Review Title:</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={reviewTitle}
-                                onChange={(event) => setReviewTitle(event.target.value)}
+                                value={title}
+                                onChange={(event) => setTitle(event.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Your Review:</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={userReview}
-                                onChange={(event) => setUserReview(event.target.value)}
+                                value={description}
+                                onChange={(event) => setDescription(event.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
@@ -95,14 +125,14 @@ export default function AddReview({fetchReviews}) {  //geting the function via p
                                 value={rating}
                                 onChange={(event) => setRating(event.target.value)}
                             >
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+                                <option value="1">⭐️</option>
+                                <option value="2">⭐️⭐️</option>
+                                <option value="3">⭐️⭐️⭐️</option>
+                                <option value="4">⭐️⭐️⭐️⭐️</option>
+                                <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
                             </Form.Select>
                         </Form.Group>
-                        <Button type="submit">Submit Review</Button>
+                        <Button  type="submit">Submit Review</Button>
                     </Form>
                 </Modal.Body>
             </Modal>
