@@ -9,10 +9,11 @@ root.render(
   <React.StrictMode>
 
     <Auth0Provider
-      domain=""
-      clientId=""
-      audience=""
+      domain="dev-vgne2g3s5s05ruv2.us.auth0.com"
+      clientId="KdJVabfGfOg1jRGaSuvdvlb5zp4AtIW3"
+      audience="bitteruserapi"
       scope="openid profile email"
+      
    
     authorizationParams={{
       redirect_uri: window.location.origin
