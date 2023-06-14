@@ -95,3 +95,8 @@ footer {
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 20px;
 }
+
+.search-form {
+  max-width: 300px; 
+  margin: 0 auto; 
+}

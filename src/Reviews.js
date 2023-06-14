@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Form } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
 import AddReview from './AddReview';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 export default function Reviews() {
@@ -15,10 +16,15 @@ export default function Reviews() {
     const [show, setShow] = useState(false);// control the modal
     const { getAccessTokenSilently } = useAuth0();
     const { isAuthenticated } = useAuth0();
-    
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+
+
     useEffect(() => {
-        fetchReviews(); //runs the func when first rendered
-    }, []);
+        fetchReviews(searchQuery, selectedCategory); //runs the func when first rendered
+        //(searchQueary) filters the reviews based on the user searches
+    }, [searchQuery, selectedCategory]);
 
     function reviewLikes() {
         setLikes(likes + 1)
@@ -37,13 +43,22 @@ export default function Reviews() {
                 {
                     headers: {
                         authorization: `Bearer ${token}`,
-                    }
+                    },
+                    params: {
+                        searchQuery: searchQuery,
+                        category: selectedCategory,
+                    },
                 }
             );
             setReviews(response.data)
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleSearch = () => {
+        fetchReviews(searchQuery, selectedCategory);
+
     };
 
     const handleReviewSubmit = async (review) => { // accepts the obj, sends post req to http to add review to server and
@@ -113,7 +128,28 @@ export default function Reviews() {
                 setShow={setShow}
                 show={show}
                 onHide={() => setShow(false)}
+                setSelectedCategory={setSelectedCategory}
+
             /></div>
+            <div className="search-form">
+                
+                <Form.Select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                    <option value="">All Categories</option>
+                    <option value="Restaurants & Food">#BiteSizedReviews 🍔</option>
+                    <option value="Movies & Entertainment">#CinemaCritic 🍿</option>
+                    <option value="Retail & Shopping">#RetailShowdown 🛍️</option>
+                    <option value="Travel & Hospitality">#TravelTrials ✈️</option>
+                    <option value="Education & Learning">#EducationEvaluations 🎓</option>
+                    <option value="Jobs & Workplaces">#TheOfficeChronicles 💼</option>
+                    <option value="Public Services & Government">#GovernmentGripes 🏛️</option>
+                    <option value="Healthcare Services">#HealthcareHeroes&Hurdles 🩺</option>
+                    <option value="Other">#TheUncharted 🎭</option>
+                </Form.Select>
+                <button onClick={handleSearch}>Search</button>
+            </div>
 
             <div className="cards">
                 {reviews.length > 0 ? ( //map iterates over each review and creates a card with buttons
