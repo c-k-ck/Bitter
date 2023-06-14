@@ -18,13 +18,15 @@ export default function Reviews() {
     const { isAuthenticated } = useAuth0();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [filteredReviews, setFilteredReviews] = useState([]);
+
 
 
 
     useEffect(() => {
-        fetchReviews(searchQuery, selectedCategory); //runs the func when first rendered
+        fetchReviews(); //runs the func when first rendered
         //(searchQueary) filters the reviews based on the user searches
-    }, [searchQuery, selectedCategory]);
+    }, []);
 
     function reviewLikes() {
         setLikes(likes + 1)
@@ -56,10 +58,34 @@ export default function Reviews() {
         }
     };
 
-    const handleSearch = () => {
-        fetchReviews(searchQuery, selectedCategory);
+    const applyFilters = () => {
+        let filteredResults = reviews; // Start with all reviews
+    
+        // Apply search query filter
+        if (searchQuery) {
+          filteredResults = filteredResults.filter((review) =>
+            review.title.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        }
+    
+        // Apply category filter
+        if (selectedCategory) {
+          filteredResults = filteredResults.filter(
+            (review) => review.category == selectedCategory
+          );
+        }
+    console.log(filteredResults)
+    console.log(reviews)
+        setFilteredReviews(filteredResults); // Update filteredReviews
+      };
+    
+      const handleSearch = () => {
+        applyFilters();
+      };
+    // const handleSearch = () => {
+    //     fetchReviews(searchQuery, selectedCategory);
 
-    };
+    // };
 
     const handleReviewSubmit = async (review) => { // accepts the obj, sends post req to http to add review to server and
         //refetches the reviews
@@ -152,8 +178,8 @@ export default function Reviews() {
             </div>
 
             <div className="cards">
-                {reviews.length > 0 ? ( //map iterates over each review and creates a card with buttons
-                    reviews.map((review) => (
+                {filteredReviews.length > 0 ? ( //map iterates over each review and creates a card with buttons
+                    filteredReviews.map((review) => (
                         <div key={review._id} >
                             <Card key={review._id}>
                                 <Card.Body>
