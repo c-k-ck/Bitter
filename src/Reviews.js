@@ -29,18 +29,20 @@ export default function Reviews() {
 
     const fetchReviews = async () => { //sends the get req to fethc rev from server
         try {
-            const token = await getAccessTokenSilently({
-                audience: 'bitteruserapi',
-                scope: 'openid profile email'
-            });
-            const response = await axios.get('http://localhost:3001/post',
-                {
+            let config = {}; // configuration for axios request
+            if (isAuthenticated) {
+                const token = await getAccessTokenSilently({
+                    audience: 'bitteruserapi',
+                    scope: 'openid profile email'
+                });
+                config = {
                     headers: {
                         authorization: `Bearer ${token}`,
                     }
-                }
-            );
-            setReviews(response.data)
+                };
+            }
+            const response = await axios.get('http://localhost:3001/post', config);
+            setReviews(response.data);
         } catch (error) {
             console.log(error);
         }

@@ -7,19 +7,22 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Profile = () => {
+function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [profileData, setProfileData] = useState(null);
   const [editingProfile, setEditingprofile] = useState(false);
-  const [givenProfileData, setGivenProfileData] = useState({ age: '', hometown: '' });
+  const [age, setAge] = useState({age: ''});
+  const [hometown, setHometown] = useState({hometown: ''});
+  const [newUser, setNewUser] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
+
   useEffect(() => {
 
     const fetchProfileData = async () => {
 
       try {
         const token = await getAccessTokenSilently({
-          audience: 'bitteruserapi', 
+          audience: 'bitteruserapi',
           scope: 'open profile email',
         });
         console.log(token);
@@ -29,44 +32,88 @@ const Profile = () => {
             headers: {
               authorization: `Bearer ${token}`,
             }
-          })
-          setProfileData(response.data);
-          setGivenProfileData(response.data);
-        }
+          });
+          if (response.data) {
+            setProfileData(response.data);
+            setNewUser(false);
 
+          } else {
+            setNewUser(true);
+          }
+        }
       } catch (error) {
         console.error('Error fetching profile data:', error)
+        
       }
+
     };
     fetchProfileData();
 
   }, [isAuthenticated, user]);
 
+  const handleAgeChange = (event) => {
+    setAge({ age: event.target.value });
+  };//spreading to create a new object with all old properties, field is using computed property names and we can use a variable as a property name
+  
+  const handleHometownChange = (event) => {
+    setHometown({ hometown: event.target.value });
+  };
   const handleProfileUpdate = async () => {
+    const updatedProfileData ={
+      age: age.age,
+      hometown: hometown.hometown,
+    };
     try {
       const token = await getAccessTokenSilently({
-        audience: 'bitteruserapi', 
+        audience: 'bitteruserapi',
         scope: 'open profile email',
       });
-      const response = await axios.post('http://localhost:3001/user', { email: user.email, ...givenProfileData }, {
+      const response = await axios.post('http://localhost:3001/user', { email: user.email, ...updatedProfileData }, {
         headers: {
           authorization: `Bearer ${token}`,
         }
       })
       console.log('Profile udpated!', response);
-      setProfileData(givenProfileData);// updates local profile data with submitted changes
+      setProfileData(updatedProfileData);// updates local profile data with submitted changes
       setEditingprofile(false);//we are no longer editing
     } catch (error) {
       console.error('Error updating profile', error);
+      console.error('Error updating profile:', error.message);
+      console.error('Server response:', error.response.data);
     }
   };
 
-  const handleAgeandHometownChange = (event, field) => {
-    setProfileData({ ...profileData, [field]: event.target.value })
-  }; //spreading to create a new object with all old properties, field is using computed property names and we can use a variable as a property name
-
   if (isLoading) {
     return <div>Loading...</div>
+  }
+  if(newUser){
+    return (
+      <div>
+        <Card className="cards">
+          <Card.Img variant="top" src={user.picture} alt={user.name} />
+          <Card.Body>
+            <Card.Title>{user.name}</Card.Title>
+            <Card.Text>
+              Please enter profile your profile information.
+            </Card.Text>
+          </Card.Body>
+          <ListGroup className="list-group-flush">
+            <ListGroup.Item>{user.email}</ListGroup.Item>
+            <ListGroup.Item>
+              
+                <p>Age:</p>
+                <input type='text' value={age.age} onChange={handleAgeChange} />
+            </ListGroup.Item>
+            <ListGroup.Item>
+            <p>Hometown:</p>
+                <input type='text' value={hometown.hometown} onChange={handleHometownChange} />
+               
+            </ListGroup.Item>
+          </ListGroup>
+            <Button variant="primary" onClick={handleProfileUpdate}>Save Changes</Button>          
+        </Card>
+      </div>
+    )
   }
   console.log(isAuthenticated)
   return (
@@ -84,13 +131,13 @@ const Profile = () => {
             <ListGroup.Item>{user.email}</ListGroup.Item>
             <ListGroup.Item>
               {editingProfile ?
-                <input value={givenProfileData.age} onChange={(event) => handleAgeandHometownChange(event, 'age')} />
-                : profileData.age}
+                <input type='text' value={age.age} onChange={handleAgeChange} />
+                :( profileData && profileData.age)}
             </ListGroup.Item>
             <ListGroup.Item>
               {editingProfile ?
-                <input value={givenProfileData.hometown} onChange={(event) => handleAgeandHometownChange(event, 'hometown')} />
-                : profileData.hometown}
+                <input type='text' value={hometown.hometown} onChange={handleHometownChange} />
+                : ( profileData && profileData.hometown)}
             </ListGroup.Item>
           </ListGroup>
           {editingProfile ?

@@ -30,7 +30,7 @@ function App() {
             <Route
               path="/"
               
-              element={ <Reviews />}
+              element={ <Reviews/>}
             >
             </Route>
             
