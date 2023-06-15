@@ -99,6 +99,7 @@ export default function AddReview({
                                         value={category}
                                         onChange={(event) => setCategory(event.target.value)}
                                     >
+                                        <option value="Choose">Select a Category 😊</option>
                                         <option value="Restaurants & Food">#BiteSizedReviews 🍔</option>
                                         <option value="Movies & Entertainment">#CinemaCritic 🍿</option>
                                         <option value="Retail & Shopping">#RetailShowdown 🛍️</option>
@@ -132,6 +133,7 @@ export default function AddReview({
                                         value={rating}
                                         onChange={(event) => setRating(event.target.value)}
                                     >
+                                        <option value="0">Select</option>
                                         <option value="1">⭐️</option>
                                         <option value="2">⭐️⭐️</option>
                                         <option value="3">⭐️⭐️⭐️</option>

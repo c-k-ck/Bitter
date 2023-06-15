@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Alert from 'react-bootstrap/Alert';
 
 function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -68,7 +69,7 @@ function Profile() {
         audience: 'bitteruserapi',
         scope: 'open profile email',
       });
-      const response = await axios.post('http://localhost:3001/user', { email: user.email, ...updatedProfileData }, {
+      const response = await axios.put('http://localhost:3001/user', { email: user.email, ...updatedProfileData }, {
         headers: {
           authorization: `Bearer ${token}`,
         }
@@ -119,7 +120,7 @@ function Profile() {
   return (
     isAuthenticated && profileData && (
       <div>
-        <Card>
+        <Card className="cards">
           <Card.Img variant="top" src={user.picture} alt={user.name} />
           <Card.Body>
             <Card.Title>{user.name}</Card.Title>
@@ -130,11 +131,13 @@ function Profile() {
           <ListGroup className="list-group-flush">
             <ListGroup.Item>{user.email}</ListGroup.Item>
             <ListGroup.Item>
+              <p>Age:</p>
               {editingProfile ?
                 <input type='text' value={age.age} onChange={handleAgeChange} />
                 :( profileData && profileData.age)}
             </ListGroup.Item>
             <ListGroup.Item>
+              <p>Hometown:</p>
               {editingProfile ?
                 <input type='text' value={hometown.hometown} onChange={handleHometownChange} />
                 : ( profileData && profileData.hometown)}

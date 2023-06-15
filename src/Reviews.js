@@ -73,27 +73,27 @@ export default function Reviews() {
         }
     }
 
-    const handleReviewDelete = async (postId) => { //accepts postId, sends the delete req to delete the review with the id, refetches
+    const handleReviewDelete = async (id) => { //accepts postId, sends the delete req to delete the review with the id, refetches
         try {
             const token = await getAccessTokenSilently({
                 audience: 'bitteruserapi',
                 scope: 'openid profile email'
             });
 
-            const response = await axios.delete(`http://localhost:3001/post/${postId}`
+            const response = await axios.delete(`http://localhost:3001/post/${id}`
                 , {
                     headers: {
                         authorization: `Bearer ${token}`,
                     }
                 }
             );
-            if (response.status === 200) {
+            if (response.status === 204) {
 
                 fetchReviews();
 
             }
         } catch (error) {
-            console.log(error);
+            console.error('Error deleting review:', error.message);
         }
     }
 
