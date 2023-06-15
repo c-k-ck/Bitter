@@ -125,7 +125,7 @@ function Profile() {
           <Card.Body>
             <Card.Title>{user.name}</Card.Title>
             <Card.Text>
-              Profile Information goes here.
+              Welcome
             </Card.Text>
           </Card.Body>
           <ListGroup className="list-group-flush">
@@ -145,7 +145,7 @@ function Profile() {
           </ListGroup>
           {editingProfile ?
             <Button variant="primary" onClick={handleProfileUpdate}>Save Changes</Button>
-            : <Button variant="primary" onClick={() => setEditingprofile(true)}>Edit Profile</Button>
+            : <Button variant="primary" style={{height: '30px', width:'200px', marginTop:'300px'}} onClick={() => setEditingprofile(true)}>Edit Profile</Button>
           }
         </Card>
       </div>

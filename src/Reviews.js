@@ -47,7 +47,11 @@ export default function Reviews() {
             const response = await axios.get('http://localhost:3001/post', config);
             setReviews(response.data);
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 429) {
+                console.error('Rate limit exceeded. Please try again later -Auth0.');
+              } else {
+                console.error('Error fetching reviews:', error.message);
+              }
         }
     };
 
