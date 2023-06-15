@@ -46,6 +46,7 @@ export default function Reviews() {
             }
             const response = await axios.get('http://localhost:3001/post', config);
             setReviews(response.data);
+            applyFilters(); 
         } catch (error) {
             if (error.response && error.response.status === 429) {
                 console.error('Rate limit exceeded. Please try again later -Auth0.');
@@ -135,6 +136,21 @@ export default function Reviews() {
     };
     const handleShow = () => setShow(true); // sets show to true which triggers modal for adding review
 
+    const censorWords = ['kill', 'stab', 'die', 'asshole']; // List of bad words to censor
+
+    const censorContent = (content) => {
+      let censoredContent = content;
+      
+      // Replace bad words with asterisks
+      censorWords.forEach((word) => {
+        const regex = new RegExp(word, 'gi'); //g = gloabl i = case sensitive
+        censoredContent = censoredContent.replace(regex, '*'.repeat(word.length));
+      });
+      
+      return censoredContent;
+    };
+
+
     return (
         <div>
             <div><AddReview //this components edits and adds reviews, passing down props
@@ -168,14 +184,14 @@ export default function Reviews() {
             </div>
 
             <div className="cards">
-                {filteredReviews.length > 0 ? ( //map iterates over each review and creates a card with buttons
+                {filteredReviews.length > 0 || searchQuery || selectedCategory ? ( //map iterates over each review and creates a card with buttons
                     filteredReviews.map((review) => (
                         <div key={review._id} >
                             <Card key={review._id}>
                                 <Card.Body>
-                                    <Card.Title> {review.title} </Card.Title>
+                                    <Card.Title> {censorContent(review.title)} </Card.Title>
                                     <Card.Subtitle>{review.category}</Card.Subtitle>
-                                    <Card.Text>{review.description}</Card.Text>
+                                    <Card.Text>{censorContent(review.description)}</Card.Text>
                                     <p>{review.rating}/5</p>
                                 </Card.Body>
                                 {isAuthenticated && (
