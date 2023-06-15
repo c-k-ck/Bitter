@@ -4,21 +4,21 @@ import Footer from './Footer.js';
 import About from './About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { useAuth0 } from "@auth0/auth0-react";
+import Welcome from './Welcome';
+import Profile from './Profile';
+import Reviews from './Reviews';
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import Welcome from './Welcome';
-import Profile from './Profile';
-import Reviews from './Reviews';
 
 
 
 function App() {
-  // const { isAuthenticated } = useAuth0();
-  
+  const { isAuthenticated } = useAuth0();
+  console.log(isAuthenticated)
   return (
 
     <>
@@ -29,8 +29,8 @@ function App() {
           <Routes>
             <Route
               path="/"
-              // element={isAuthenticated ? <Profile/>: <Welcome />}
-              element={ <Reviews />}
+              
+              element={ <Reviews/>}
             >
             </Route>
             
@@ -39,7 +39,8 @@ function App() {
 
             </Route>
             <Route exact path="/Profile"
-              element={<Profile />}>
+            element={isAuthenticated ? <Profile/>: <Reviews/> }
+              >
 
             </Route>
           </Routes>

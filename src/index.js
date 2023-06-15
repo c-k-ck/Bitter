@@ -4,19 +4,20 @@ import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 
     <Auth0Provider
-      domain=""
-      clientId=""
-      audience=""
+      domain="dev-vgne2g3s5s05ruv2.us.auth0.com"
+      clientId="KdJVabfGfOg1jRGaSuvdvlb5zp4AtIW3"
+      audience="bitteruserapi"
       scope="openid profile email"
-   
-    authorizationParams={{
-      redirect_uri: window.location.origin
-    }}
+      
+      authorizationParams={{
+        redirect_uri: window.location.origin + '/Profile'
+      }}
     >
       <App />
     </Auth0Provider>
